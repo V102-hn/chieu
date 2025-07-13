@@ -1,50 +1,62 @@
 // =================================================================
-// DÁN MÃ CẤU HÌNH FIREBASE CỦA BẠN VÀO ĐÂY
+// CẤU HÌNH FIREBASE CỦA BẠN
 // =================================================================
-// Import the functions you need from the SDKs you need
 const firebaseConfig = {
   apiKey: "AIzaSyCy1nZAKExo3D57iBi4z3WX8qRkIZFKvfE",
   authDomain: "fir-c5e3b.firebaseapp.com",
   projectId: "fir-c5e3b",
-  storageBucket: "fir-c5e3b.appspot.com", // Tôi đã sửa lại cho bạn
+  storageBucket: "fir-c5e3b.appspot.com",
   messagingSenderId: "877821543377",
   appId: "1:877821543377:web:285176b9c418ca340056f0",
   measurementId: "G-67ZCEH1R2Y"
 };
 
-// =================================================================
-
 // --- Khởi tạo Firebase ---
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
+
+// =========================================================
+// PHẦN BẠN BỊ THIẾU - ĐÃ ĐƯỢC BỔ SUNG ĐẦY ĐỦ
+// =========================================================
 // --- Lấy các phần tử HTML ---
 const loginGate = document.getElementById('login-gate');
 const contentWrapper = document.getElementById('content-wrapper');
-// ... (các dòng lấy phần tử khác giữ nguyên như cũ) ...
+const codeForm = document.getElementById('code-form');
+const codeInput = document.getElementById('code-input');
+const errorMessage = document.getElementById('error-message');
+// =========================================================
 
-// --- BƯỚC QUAN TRỌNG: CẬP NHẬT DANH SÁCH VIDEO VỚI ĐƯỜNG DẪN LOCAL ---
+
+// --- Hàm hiển thị nội dung ---
+function showContent() {
+    loginGate.classList.add('hidden');
+    contentWrapper.classList.remove('hidden');
+    initializeVideoPlayer();
+}
+
+// --- Hàm khởi tạo trình phát video ---
 function initializeVideoPlayer() {
-    // THAY THẾ BẰNG TÊN FILE VIDEO VÀ ẢNH CỦA BẠN TRONG THƯ MỤC 'assets'
+    // =========================================================
+    // SỬA LẠI ĐƯỜNG DẪN VIDEO VÀ ẢNH CHO ĐÚNG
+    // =========================================================
     const videoData = [
         { 
             id: 'vid01', 
             title: 'Video Kỷ Niệm 1', 
-            // Đường dẫn trỏ tới file trong thư mục assets
-            src: 'assets/demo1', 
-            thumbnail: 'assets/ten_file_anh_1.jpg'
+            src: 'assets/demo1.mp4', // ĐÃ SỬA: Thêm đuôi .mp4
+            thumbnail: 'assets/thumbnail1.jpg' // THAY BẰNG TÊN ẢNH THẬT CỦA BẠN
         },
         { 
             id: 'vid02', 
             title: 'Video Vui Vẻ 2', 
-            src: 'assets/ten_file_video_2.mp4', 
-            thumbnail: 'assets/ten_file_anh_2.png'
+            src: 'assets/ten_file_video_2.mp4', // THAY BẰNG TÊN VIDEO THẬT
+            thumbnail: 'assets/ten_file_anh_2.png' // THAY BẰNG TÊN ẢNH THẬT
         },
-        // Thêm các video khác nếu có
     ];
+    // =========================================================
 
-    // --- PHẦN CÒN LẠI CỦA HÀM NÀY GIỮ NGUYÊN ---
-    // (Bao gồm code populatePlaylist, addEventListener, ...)
+    // --- Code điều khiển video (giữ nguyên) ---
     const mainVideo = document.getElementById('main-video');
     const mainVideoTitle = document.querySelector('.main-video-title');
     const videoListContainer = document.querySelector('.video-list');
@@ -85,19 +97,7 @@ function initializeVideoPlayer() {
     document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key === 's') { event.preventDefault(); } });
 }
 
-// --- PHẦN LOGIC XÁC THỰC MÃ CODE GIỮ NGUYÊN NHƯ CŨ ---
-codeForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    // ... code xác thực mã giữ nguyên ...
-});
-
-function showContent() {
-    loginGate.classList.add('hidden');
-    contentWrapper.classList.remove('hidden');
-    initializeVideoPlayer();
-}
-
-// (Dán toàn bộ phần code xác thực mã từ câu trả lời trước vào đây)
+// --- Logic xác thực mã code (Chỉ có 1 khối duy nhất) ---
 codeForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const userCode = codeInput.value.trim().toUpperCase();
