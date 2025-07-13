@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Thư Viện Video Dành Tặng Bạn</title>
+    <!-- Sửa đường dẫn đến file CSS -->
+    <link rel="stylesheet" href="css/style.css"> 
+</head>
+<body>
+
+    <!-- CỔNG NHẬP MÃ BẢO VỆ -->
+    <div id="login-gate">
+        <div class="login-box">
+            <h2>Nhập mã truy cập</h2>
+            <p class="login-description">Đây là món quà đặc biệt, vui lòng nhập mã nhé.</p>
+            <form id="code-form">
+                <input type="text" id="code-input" placeholder="Mã của bạn..." required autocomplete="off">
+                <button type="submit">Xác Nhận</button>
+            </form>
+            <p id="error-message" class="error-message"></p>
+        </div>
+    </div>
+
+    <!-- NỘI DUNG CHÍNH (BỊ ẨN BAN ĐẦU) -->
+    <div id="content-wrapper" class="hidden">
+        <div class="container">
+            <main class="main-video-container">
+                <video id="main-video" controls autoplay muted oncontextmenu="return false;"></video>
+                <h3 class="main-video-title">Chọn một video để phát</h3>
+            </main>
+            <aside class="video-playlist">
+                <h3 class="playlist-title">Danh sách phát</h3>
+                <div class="video-list"></div>
+            </aside>
+        </div>
+    </div>
+
+    <!-- Firebase SDK - Giữ nguyên -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
+    
+    <!-- Sửa đường dẫn đến file JavaScript -->
+    <script src="js/script.js"></script> 
+</body>
+</html>
