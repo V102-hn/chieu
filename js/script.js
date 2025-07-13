@@ -1,5 +1,5 @@
 // =================================================================
-// CẤU HÌNH FIREBASE CỦA BẠN
+// CẤU HÌNH FIREBASE CỦA BẠN (GIỮ NGUYÊN)
 // =================================================================
 const firebaseConfig = {
   apiKey: "AIzaSyCy1nZAKExo3D57iBi4z3WX8qRkIZFKvfE",
@@ -15,18 +15,12 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const db = firebase.firestore();
 
-
-// =========================================================
-// PHẦN BẠN BỊ THIẾU - ĐÃ ĐƯỢC BỔ SUNG ĐẦY ĐỦ
-// =========================================================
 // --- Lấy các phần tử HTML ---
 const loginGate = document.getElementById('login-gate');
 const contentWrapper = document.getElementById('content-wrapper');
 const codeForm = document.getElementById('code-form');
 const codeInput = document.getElementById('code-input');
 const errorMessage = document.getElementById('error-message');
-// =========================================================
-
 
 // --- Hàm hiển thị nội dung ---
 function showContent() {
@@ -35,32 +29,53 @@ function showContent() {
     initializeVideoPlayer();
 }
 
-// --- Hàm khởi tạo trình phát video ---
+// --- Hàm khởi tạo trình phát video (ĐÃ CẬP NHẬT HOÀN TOÀN CHO HLS) ---
 function initializeVideoPlayer() {
     // =========================================================
-    // SỬA LẠI ĐƯỜNG DẪN VIDEO VÀ ẢNH CHO ĐÚNG
+    // SỬA LẠI ĐƯỜNG DẪN VIDEO HLS (.m3u8) VÀ ẢNH CHO ĐÚNG
     // =========================================================
     const videoData = [
         { 
             id: 'vid01', 
             title: 'Video Kỷ Niệm 1', 
-            src: 'assets/demo1.mp4', // ĐÃ SỬA: Thêm đuôi .mp4
-            thumbnail: 'assets/thumbnail1.jpg' // THAY BẰNG TÊN ẢNH THẬT CỦA BẠN
+            // ĐÃ SỬA: Đường dẫn tới file .m3u8 của video 1
+            src: 'assets/vid1/video1.m3u8', 
+            thumbnail: 'assets/nen.jpg' // THAY BẰNG TÊN ẢNH THẬT CỦA BẠN
         },
         { 
             id: 'vid02', 
             title: 'Video Vui Vẻ 2', 
-            src: 'assets/ten_file_video_2.mp4', // THAY BẰNG TÊN VIDEO THẬT
+            // ĐÃ SỬA: Đường dẫn tới file .m3u8 của video 2
+            src: 'assets/vid2/video2.m3u8', // THAY BẰNG TÊN FILE .m3u8 THẬT
             thumbnail: 'assets/ten_file_anh_2.png' // THAY BẰNG TÊN ẢNH THẬT
         },
     ];
     // =========================================================
 
-    // --- Code điều khiển video (giữ nguyên) ---
     const mainVideo = document.getElementById('main-video');
     const mainVideoTitle = document.querySelector('.main-video-title');
     const videoListContainer = document.querySelector('.video-list');
+    let hls = new Hls();
 
+    // Hàm chuyên để tải và phát video HLS
+    function loadVideo(videoInfo) {
+        if (Hls.isSupported()) {
+            hls.loadSource(videoInfo.src);
+            hls.attachMedia(mainVideo);
+            hls.on(Hls.Events.MANIFEST_PARSED, function() {
+                mainVideo.play();
+            });
+        } else if (mainVideo.canPlayType('application/vnd.apple.mpegurl')) {
+            // Dành cho các thiết bị Apple (Safari) hỗ trợ HLS gốc
+            mainVideo.src = videoInfo.src;
+            mainVideo.addEventListener('loadedmetadata', function() {
+                mainVideo.play();
+            });
+        }
+        mainVideoTitle.textContent = videoInfo.title;
+    }
+
+    // Tạo danh sách phát
     function populatePlaylist() {
         videoListContainer.innerHTML = '';
         videoData.forEach(video => {
@@ -72,32 +87,35 @@ function initializeVideoPlayer() {
         });
     }
 
+    // Xử lý khi click vào một video trong danh sách
     videoListContainer.addEventListener('click', (event) => {
         const clickedItem = event.target.closest('.video-item');
         if (!clickedItem) return;
+
         const videoId = clickedItem.dataset.id;
         const selectedVideo = videoData.find(v => v.id === videoId);
+
         if (selectedVideo) {
-            mainVideo.src = selectedVideo.src;
-            mainVideoTitle.textContent = selectedVideo.title;
-            mainVideo.play();
+            loadVideo(selectedVideo); // Gọi hàm tải video mới
             document.querySelectorAll('.video-item').forEach(item => item.classList.remove('active'));
             clickedItem.classList.add('active');
         }
     });
 
+    // Khởi tạo
     populatePlaylist();
-
     if (videoData.length > 0) {
-        mainVideo.src = videoData[0].src;
-        mainVideoTitle.textContent = videoData[0].title;
+        // Tải video đầu tiên khi trang được mở
+        loadVideo(videoData[0]);
         document.querySelector('.video-item')?.classList.add('active');
     }
 
+    // Chống lưu trang bằng Ctrl+S (giữ nguyên)
     document.addEventListener('keydown', event => { if ((event.ctrlKey || event.metaKey) && event.key === 's') { event.preventDefault(); } });
 }
 
-// --- Logic xác thực mã code (Chỉ có 1 khối duy nhất) ---
+
+// --- Logic xác thực mã code (GIỮ NGUYÊN) ---
 codeForm.addEventListener('submit', async (e) => {
     e.preventDefault();
     const userCode = codeInput.value.trim().toUpperCase();

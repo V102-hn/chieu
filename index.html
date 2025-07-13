@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Thư Viện Video Dành Tặng Bạn</title>
-    <!-- Sửa đường dẫn đến file CSS -->
+    <!-- Đường dẫn đến file CSS -->
     <link rel="stylesheet" href="css/style.css"> 
 </head>
 <body>
@@ -26,6 +26,7 @@
     <div id="content-wrapper" class="hidden">
         <div class="container">
             <main class="main-video-container">
+                <!-- Thẻ video đã có sẵn thuộc tính chống chuột phải -->
                 <video id="main-video" controls autoplay muted oncontextmenu="return false;"></video>
                 <h3 class="main-video-title">Chọn một video để phát</h3>
             </main>
@@ -36,11 +37,14 @@
         </div>
     </div>
 
-    <!-- Firebase SDK - Giữ nguyên -->
+    <!-- Firebase SDK -->
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
     
-    <!-- Sửa đường dẫn đến file JavaScript -->
+    <!-- !!! THƯ VIỆN HLS.JS ĐƯỢC THÊM VÀO ĐÂY !!! -->
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+
+    <!-- File JavaScript của bạn -->
     <script src="js/script.js"></script> 
 </body>
 </html>
